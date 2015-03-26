@@ -1,6 +1,6 @@
 var ace;
 try {
-  ace = require('./ace');
+//  ace = require('./ace');
 }
 catch (err) {
   // failed to load ace, no problem, we will fall back to plain text
@@ -38,6 +38,9 @@ textmode.create = function (container, options) {
   this.mode = (options.mode == 'code') ? 'code' : 'text';
   if (this.mode == 'code') {
     // verify whether Ace editor is available and supported
+    if (typeof ace === 'undefined') {
+      ace = window.ace;
+    }
     if (typeof ace === 'undefined') {
       this.mode = 'text';
       util.log('WARNING: Cannot load code editor, Ace library not loaded. ' +
@@ -117,6 +120,7 @@ textmode.create = function (container, options) {
     this.content.appendChild(this.editorDom);
 
     var editor = ace.edit(this.editorDom);
+    editor.$blockScrolling = Infinity;
     editor.setTheme('ace/theme/jsoneditor');
     editor.setShowPrintMargin(false);
     editor.setFontSize(13);
